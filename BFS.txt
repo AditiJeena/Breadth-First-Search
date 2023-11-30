@@ -1,0 +1,125 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+struct node
+{
+    int data;
+    struct node* next;
+};
+typedef struct node node;
+
+void enqueue(int que[],int MAX,int* f,int* r,int i)
+{
+    if(*r==MAX-1)
+    {
+        printf("Queue is full\n");
+    }
+    else
+    {
+        if(*f==-1)
+        {
+            *f=0;
+        }
+        (*r)++;
+        que[*r]=i;
+    }
+
+}
+
+int dequeue(int que[],int* f,int* r)
+{
+    if(*f==-1)
+    {
+        printf("Queue is empty\n");
+        return -1;
+    }
+    else
+    {
+        int t=que[*f];
+        if(*f==*r)
+        {
+            *f=-1;
+            *r=-1;
+        }
+        else
+        {
+            (*f)++;
+        }
+        return t;
+    }
+}
+
+int isempty(int *f)
+{
+    return (*f)==-1;
+}
+void BFS(int G[][7],int start,int n)
+{
+int MAX=100,N=7;
+int que[MAX];
+node *f=-1,*r=-1;
+int i=start,j;
+int visited[7]={0};
+
+printf("%d\t",i);
+visited[i]=1;
+enqueue(que,MAX,&f,&r,i);
+
+while(!isempty(&f))
+{
+    i=dequeue(que,&f,&r);
+    for(j=1;j<n;j++)
+    {
+        if(G[i][j]==1 && visited[j]==0)
+        {
+            printf("%d\t",j);
+            visited[j]=1;
+            enqueue(que,MAX,&f,&r,j);
+        }
+    }
+}
+}
+int main()
+{
+int choice,startnode;
+int G[7][7]={
+             {0,0,0,0,0,0,0},
+             {0,0,1,1,0,0,0},
+             {0,1,0,0,1,0,0},
+             {0,1,0,0,1,0,0},
+             {0,0,1,1,0,1,1},
+             {0,0,0,0,1,0,0},
+             {0,0,0,0,1,0,0}};
+do
+    {
+        printf("\nMenu:\n");
+        printf("1. Breadth-First Search (BFS)\n");
+        printf("2. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice)
+        {
+        case 1:
+            printf("Enter the starting node for BFS: ");
+            scanf("%d", &startnode);
+            if (startnode >= 0 && startnode < 7)
+            {
+                printf("BFS Traversal starting from node %d:\n", startnode);
+                BFS(G,startnode,7);
+            }
+            else
+            {
+                printf("Invalid starting node. Please enter a valid node between 0 and 6.\n");
+            }
+            break;
+        case 2:
+            printf("Exiting the program\n");
+            break;
+        default:
+            printf("Invalid choice. Please enter a valid option.\n");
+        }
+
+    } while (choice != 2);
+return 0;
+}
